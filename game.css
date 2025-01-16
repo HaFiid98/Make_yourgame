@@ -1,0 +1,50 @@
+.container {
+    width: 500px;
+    height: 1000px;
+    background-color: #000000;
+    align-content: center;
+    position: relative;
+    border: 30px double #361664;
+    background: url("https://giffiles.alphacoders.com/215/215784.gif") center/cover no-repeat;
+    image-rendering: pixelated;
+}
+.ship{
+    width: 50px;
+    height: 150px;
+    position: absolute;
+bottom: 0;
+image-rendering: pixelated;
+        /* animation:AnimationMove 1s  ; */
+
+
+}
+/* img{
+    image-rendering: pixelated;
+width: 200px;
+height: auto;
+} */
+
+.bullet{
+    width: 20px;
+    height: 12px;
+    border-radius: 100%;
+    background-color: #eb1818;
+
+}
+
+    .Enemy {
+        width: 50px;
+        height: 50px;
+        background-color: red;
+        /* position: absolute; */
+    }
+
+    /* @keyframes AnimationMove {
+        from{
+            transform: translate3d(0px,0,0);
+        }
+        to {
+            transform: translate3d(-100%,0,0);
+        }
+    }
+     */
