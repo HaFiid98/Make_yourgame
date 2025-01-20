@@ -26,56 +26,7 @@
 
 // const ball = new ball(7)
 var container = document.querySelector(".container")
-var score = 0
-class Enemy{
-    constructor(x,y){
-        this.TransalteY = 0
-        this.speed = 10
-        this.x = x;
-        this.y = y;
-        this.spawnPostion = 0
-        this.Enemys = document.createElement("div")
-    }
-    makeEnemy(Number){
-        for (let index = 0; index <= Number; index++) {
-            this.Enemys.classList.add('Enemy')
-            this.Enemys.style.position = "absolute";
-            this.Enemys.style.left = `${this.x+ this.spawnPostion}px`;
-            // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
-            this.Enemys.style.top = `${this.y - this.spawnPostion}px`;
-            this.spawnPostion += 5
-            container.append(this.Enemys)
-        }
-    }   
-     CheckCollision(bullet){
-        // console.log(this.Enemys.getBoundingClientRect().y, bullet);
-        
-        // console.log(this.Enemys.getBoundingClientRect().y, bullet.getBoundingClientRect().y);
-        if (this.Enemys ){
-   if (this.Enemys.getBoundingClientRect().bottom>=bullet.getBoundingClientRect().y    &&
-            this.Enemys.getBoundingClientRect().x <= bullet.getBoundingClientRect().x + bullet.getBoundingClientRect().width &&
-        bullet.getBoundingClientRect().x <= this.Enemys.getBoundingClientRect().right
-        ){
-            this.Enemys.classList.add("Explotion")
-            setTimeout(async () =>{
-                score += 20
-                container.querySelector('.score').innerHTML = `${score} PTS`
-                console.log("djkfdskf");
-                this.Enemys.remove()
-                 delete this.Enemys
-            },300);
-            bullet.remove()
-
-            console.log("trueeeeeeeeeeeeeee");
-        
-        
-            cancelAnimationFrame(AnimationId)       
-    }
-        }
-     
-  let AnimationId =  requestAnimationFrame(()=>this.CheckCollision(bullet));
-}
-}
+var score = 0;
 class Bullet{
     constructor(shiPosition){
         this.TransalteY = 0
@@ -91,7 +42,7 @@ class Bullet{
         // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
 
         this.Bullet.style.top = `${this.shiPosition.y}px`;
-        document.body.append(this.Bullet)
+        container.append(this.Bullet)
     }
 
     moveBullet(){
@@ -104,48 +55,94 @@ class Bullet{
         }
         this.Bullet.style.transform =  `translateY(${this.TransalteY}px)`
         this.TransalteY -= this.speed
-        requestAnimationFrame(()=>this.moveBullet());
  
     }
 }
+class Enemy extends Bullet{
+    constructor(x,y){
+        super({x,y})
+        this.TransalteY = 0
+        this.speed = 10
+        this.x = x;
+        this.y = y;
+        this.spawnPostion = 0
+        this.Enemys = document.createElement("div")
+        
+    }
+    makeEnemy(){
+            this.Enemys.classList.add('Enemy')
+            this.Enemys.style.position = "absolute";
+            this.Enemys.style.left = `${this.x+ this.spawnPostion}px`;
+            // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
+            this.Enemys.style.top = `${this.y - this.spawnPostion}px`;
+            this.spawnPostion += 5
+            container.append(this.Enemys)
+        
+    }   
+     CheckCollision(bullet){
+        // console.log(this.Enemys.getBoundingClientRect().y, bullet);
+        
+        // console.log(this.Enemys.getBoundingClientRect().y, bullet.getBoundingClientRect().y);
+        if (this.Enemys ){
+   if (this.Enemys.getBoundingClientRect().bottom>=bullet.getBoundingClientRect().y    &&
+            this.Enemys.getBoundingClientRect().x <= bullet.getBoundingClientRect().x + bullet.getBoundingClientRect().width &&
+        bullet.getBoundingClientRect().x <= this.Enemys.getBoundingClientRect().right
+        ){
+            this.Enemys.classList.add("Explotion")
+                score += 20
+                container.querySelector('.score').innerHTML = `${score} PTS`
+                this.Enemys.remove()
+                bullet.remove()
+
+                 delete this.Enemys
+
+            console.log("trueeeeeeeeeeeeeee");
+        
+        
+    }
+        }
+     
+}
+}
+
 var AlienPos = 10
 let Aliens = []
- Array.from({length:5}, ()=>{
+ Array.from({length:9}, ()=>{
     let Alien = new Enemy(AlienPos,10)
     AlienPos += 90
     Aliens.push(Alien)
-Alien.makeEnemy(1)
+Alien.makeEnemy()
 })
 
-
-// let Alien2 = new Enemy(90,10)
-// Alien2.makeEnemy(1)
 var ship = document.querySelector(".ship")
-// console.log(container.getBoundingClientRect());
-
-
+let bullets = []
+let shipspeed = 20;
+let shiPosition = {
+    x:0,
+    y:0
+}
 function move(){
     let position =  ship.getBoundingClientRect()
-   window.onkeydown = (event)=>{
-    let direction = event.code === "ArrowLeft" ? position.x -50 :  event.key === "ArrowRight" ?  position.x  -25 : 0 
-   if (direction !== 0){
-    ship.style.transform =  `translateX(${direction}px)`
-   }
+   document.onkeydown = (event)=>{
+    if (event.code === "ArrowLeft") {
+        shiPosition.x -= shipspeed; 
+    } else if (event.code === "ArrowRight") {
+        shiPosition.x += shipspeed;
+    }
+    ship.style.transform =  `translateX(${shiPosition.x}px)`
 
-   if (event.code === "Space"){
-    var Bulletz = new Bullet(position)
+   if (event.code == "Space"){
+    const Bulletz = new Bullet(position)
     Bulletz.makeBullet()
-    Bulletz.moveBullet()
+    bullets.push(Bulletz)
    }
-//    console.log(Bulletz.Bullet.getBoundingClientRect().y);
-// console.log(Aliens);
-Aliens.forEach(Alien =>  {
-    Alien.CheckCollision(Bulletz.Bullet)
+   }
+   bullets.forEach(bullet =>{
+    bullet.moveBullet()
+    Aliens.forEach(Alien =>  {
+        Alien.CheckCollision(bullet.Bullet)
+    })
 })
-   //Alien.CheckCollision()
-//    Alien2.CheckCollision(Bulletz.Bullet)
-   }
-
    requestAnimationFrame(move);
 }
     requestAnimationFrame(move);

@@ -1,6 +1,8 @@
 .container {
     width: 900px;
-    height: 1000px;
+    display: flex;
+    flex-wrap: 1;
+    height: 1300PX;
     background-color: #000000;
     align-content: center;
     position: relative;
@@ -34,7 +36,7 @@ height: auto;
 }
 
     .Enemy {
-        width: 3vw;
+        width: 2vw;
         height:5vh;
         image-rendering: pixelated;
         mix-blend-mode: screen;
@@ -42,8 +44,6 @@ height: auto;
         /* position: absolute; */
   
     }
-
-    
 
     .Explotion{
         background-blend-mode: multiply ;
@@ -58,9 +58,9 @@ height: auto;
         width:900px ;
         overflow: hidden;
         height:200px;
-        top: 0%;
-        left:85%;
-        position: absolute;
+        top: -40%;
+        left:90%;
+        position: relative;
         font-family: "Pixelify Sans";
         font-size: 40px;
         color: white;
