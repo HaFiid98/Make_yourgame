@@ -30,7 +30,7 @@ var score = 0
 class Enemy{
     constructor(x,y){
         this.TransalteY = 0
-        this.speed = 5
+        this.speed = 10
         this.x = x;
         this.y = y;
         this.spawnPostion = 0
@@ -51,20 +51,25 @@ class Enemy{
         // console.log(this.Enemys.getBoundingClientRect().y, bullet);
         
         // console.log(this.Enemys.getBoundingClientRect().y, bullet.getBoundingClientRect().y);
-        if (this.Enemys && bullet){
+        if (this.Enemys ){
    if (this.Enemys.getBoundingClientRect().bottom>=bullet.getBoundingClientRect().y    &&
             this.Enemys.getBoundingClientRect().x <= bullet.getBoundingClientRect().x + bullet.getBoundingClientRect().width &&
         bullet.getBoundingClientRect().x <= this.Enemys.getBoundingClientRect().right
         ){
-            console.log("trueeeeeeeeeeeeeee");
-            score += 20
-            container.querySelector('.score').innerHTML = `${score} PTS`
-            console.log("djkfdskf");
-            this.Enemys.remove()
-            delete this.Enemys
+            this.Enemys.classList.add("Explotion")
+            setTimeout(async () =>{
+                score += 20
+                container.querySelector('.score').innerHTML = `${score} PTS`
+                console.log("djkfdskf");
+                this.Enemys.remove()
+                 delete this.Enemys
+            },300);
             bullet.remove()
-            cancelAnimationFrame(AnimationId)
-            
+
+            console.log("trueeeeeeeeeeeeeee");
+        
+        
+            cancelAnimationFrame(AnimationId)       
     }
         }
      
@@ -150,7 +155,6 @@ function Timer(){
     let timer = container.querySelector('.timer').innerHTML
     timer = timer.slice(0, timer.length-1)
      container.querySelector('.timer').innerHTML = `${parseInt(timer)+1}s`
-
 }
 setInterval(()=>{
     Timer()

@@ -4,15 +4,16 @@
     background-color: #000000;
     align-content: center;
     position: relative;
-    border: 30px double #361664;
+    border: 30px double #000000;
     background: url("https://giffiles.alphacoders.com/215/215784.gif") center/cover no-repeat;
     image-rendering: pixelated;
 }
 .ship{
-    width: 50px;
+    width:150px;
     height: 150px;
     position: absolute;
 bottom: 0;
+background: url("CBWd93mWkAA8Nwb (1).png") center/cover no-repeat;
 image-rendering: pixelated;
         /* animation:AnimationMove 1s  ; */
 
@@ -33,13 +34,24 @@ height: auto;
 }
 
     .Enemy {
-        width: 50px;
-        height: 50px;
-        background-color: red;
-        background: url('https://i.pinimg.com/736x/ed/bc/f7/edbcf795e1d1c28408b3a386db91db9c--pixel-art-art-designs.jpg') ;
+        width: 3vw;
+        height:5vh;
+        image-rendering: pixelated;
+        mix-blend-mode: screen;
+        background: url('image.png') center/cover no-repeat ;
         /* position: absolute; */
+  
     }
 
+    
+
+    .Explotion{
+        background-blend-mode: multiply ;
+        background: url('https://media.giphy.com/media/26BRx71hqRexBe7Wo/giphy.gif') center/cover no-repeat ;
+        transition: background-image 0,3s ease;
+
+        
+    }
 
     .ScoreBoard{
         /* background-color: black; */
@@ -52,12 +64,14 @@ height: auto;
         font-family: "Pixelify Sans";
         font-size: 40px;
         color: white;
+        transition: background-image 0,3s ease;
+
     }
 
 
      
 
-    /* @keyframes AnimationMove {
+    @keyframes AnimationMove {
         from{
             transform: translate3d(0px,0,0);
         }
@@ -65,4 +79,4 @@ height: auto;
             transform: translate3d(-100%,0,0);
         }
     }
-     */
+    
