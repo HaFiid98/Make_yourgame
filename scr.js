@@ -71,12 +71,11 @@ class Enemy extends Bullet{
     }
     makeEnemy(){
             this.Enemys.classList.add('Enemy')
-            this.Enemys.style.position = "absolute";
             this.Enemys.style.left = `${this.x+ this.spawnPostion}px`;
             // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
             this.Enemys.style.top = `${this.y - this.spawnPostion}px`;
             this.spawnPostion += 5
-            container.append(this.Enemys)
+            container.querySelector(".enemy_container").append(this.Enemys)
         
     }   
      CheckCollision(bullet){
@@ -98,17 +97,15 @@ class Enemy extends Bullet{
 
             console.log("trueeeeeeeeeeeeeee");
         
-        
     }
-        }
-     
+        } 
 }
 }
 
 var AlienPos = 10
 let Aliens = []
  Array.from({length:9}, ()=>{
-    let Alien = new Enemy(AlienPos,10)
+    let Alien = new Enemy(0,0)
     AlienPos += 90
     Aliens.push(Alien)
 Alien.makeEnemy()
