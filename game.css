@@ -1,7 +1,7 @@
 .container {
     width: 900px;
     display: flex;
-    flex-wrap: 1;
+    overflow: hidden;
     height: 1300PX;
     background-color: #000000;
     align-content: center;
@@ -43,7 +43,20 @@ height: auto;
         background: url('image.png') center/cover no-repeat ;
         /* position: absolute; */
   
-    }
+    }   
+    
+    .laserBeam{
+        z-index: 0;
+        width: 300px;
+        height: 1500px;
+        border-radius:0%;
+        image-rendering: pixelated;
+background-color: #fe0000;
+        mix-blend-mode:screen;
+        background: url('7WvCTB-ezgif.com-effects.gif') center/cover no-repeat ;
+        
+        
+    } 
 
     .Explotion{
         background-blend-mode: multiply ;
@@ -58,13 +71,13 @@ height: auto;
         width:900px ;
         overflow: hidden;
         height:200px;
-        top: -40%;
-        left:90%;
+        top: 0%;
+        left:89%;
         position: relative;
         font-family: "Pixelify Sans";
         font-size: 40px;
         color: white;
-        transition: background-image 0,3s ease;
+        transition: background-image 0,3s ease-in-out;
 
     }
 

@@ -45,7 +45,7 @@ class Bullet{
         container.append(this.Bullet)
     }
 
-    moveBullet(){
+    moveBullet(direction){
         // const bullet = document.querySelector("#a")
         // console.log("dshfksjdfhsd", bullet);
         // console.log("trueeeeeeeeeeeeeeeeeeee", this.Bullet.getBoundingClientRect(), container.getBoundingClientRect().y);
@@ -54,7 +54,7 @@ class Bullet{
 
         }
         this.Bullet.style.transform =  `translateY(${this.TransalteY}px)`
-        this.TransalteY -= this.speed
+        this.TransalteY += this.speed *direction
  
     }
 }
@@ -67,6 +67,7 @@ class Enemy extends Bullet{
         this.y = y;
         this.spawnPostion = 0
         this.Enemys = document.createElement("div")
+   
         
     }
     makeEnemy(){
@@ -92,7 +93,7 @@ class Enemy extends Bullet{
                 score += 20
                 container.querySelector('.score').innerHTML = `${score} PTS`
                 this.Enemys.remove()
-                bullet.remove()
+                // bullet.remove()
 
                  delete this.Enemys
 
@@ -136,10 +137,22 @@ function move(){
     Bulletz.makeBullet()
     bullets.push(Bulletz)
    }
+   if (event.key == "s"){
+    const Bulletz = new Bullet(position)
+    Bulletz.Bullet.classList.add('laserBeam')
+    
+    Bulletz.makeBullet()
+    // Bulletz.Bullet.style.width = '1O0vw'
+    // Bulletz.Bullet.style.height = '1O0vh'
+
+    bullets.push(Bulletz)
    }
+   }
+
    bullets.forEach(bullet =>{
-    bullet.moveBullet()
+    bullet.moveBullet(-1)
     Aliens.forEach(Alien =>  {
+   
         Alien.CheckCollision(bullet.Bullet)
     })
 })
