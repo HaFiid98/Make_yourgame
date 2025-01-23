@@ -26,7 +26,29 @@
 
 // const ball = new ball(7)
 var container = document.querySelector(".container")
+var ContainerPos = container.getBoundingClientRect()
+
 var score = 0;
+var speed = 1
+var Yspeed = 0
+var xPos = 0
+
+function MoveEnemis(EnemyCountainer){
+    let position = EnemyCountainer.getBoundingClientRect()
+    Yspeed +=1
+  if (position.right >= ContainerPos.right) {
+    speed = (speed) * -1; 
+}
+if (position.left <= ContainerPos.left) {
+    speed = Math.abs(speed);
+}
+
+
+xPos += speed;  
+    EnemyCountainer.style.transform= `TranslateX(${xPos}px) TranslateY(${Yspeed}px)`
+    
+
+}
 class Bullet{
     constructor(shiPosition){
         this.TransalteY = 0
@@ -60,13 +82,14 @@ class Bullet{
 }
 class Enemy extends Bullet{
     constructor(x,y){
-        super({x,y})
-        this.TransalteY = 0
+        super({x,y});
+        this.TransalteY = 0;
         this.speed = 10
         this.x = x;
         this.y = y;
         this.spawnPostion = 0
         this.Enemys = document.createElement("div")
+        this.EnemyBullet = []
    
         
     }
@@ -77,7 +100,7 @@ class Enemy extends Bullet{
             // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
             this.Enemys.style.top = `${this.y - this.spawnPostion}px`;
             this.spawnPostion += 5
-            container.append(this.Enemys)
+            container.querySelector(".Enemy_container").append(this.Enemys)
         
     }   
      CheckCollision(bullet){
@@ -104,6 +127,12 @@ class Enemy extends Bullet{
         }
      
 }
+shoot(){
+    const bullet = new Bullet({ x: this.x + this.spawnPostion, y: this.y + this.spawnPostion });
+    bullet.makeBullet();
+    bullet.moveBullet(1)
+    this.EnemyBullet.push(bullet);
+}
 }
 
 var AlienPos = 10
@@ -117,12 +146,16 @@ Alien.makeEnemy()
 
 var ship = document.querySelector(".ship")
 let bullets = []
-let shipspeed = 20;
+let shipspeed = 30;
 let shiPosition = {
     x:0,
     y:0
 }
 function move(){
+
+    MoveEnemis(container.querySelector(".Enemy_container"))
+
+
     let position =  ship.getBoundingClientRect()
    document.onkeydown = (event)=>{
     if (event.code === "ArrowLeft") {
@@ -152,14 +185,18 @@ function move(){
    bullets.forEach(bullet =>{
     bullet.moveBullet(-1)
     Aliens.forEach(Alien =>  {
-   
         Alien.CheckCollision(bullet.Bullet)
     })
-})
+})  
    requestAnimationFrame(move);
 }
     requestAnimationFrame(move);
 
+    setInterval(() => {
+        Aliens.forEach(Alien => {
+            Alien.shoot()
+        });   
+    }, 1000);
 
 function Timer(){
     let timer = container.querySelector('.timer').innerHTML
