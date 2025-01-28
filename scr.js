@@ -1,6 +1,5 @@
 // var ship = document.querySelector(".ship")
 // console.log(ship);
-
 // function move(){
 //    let position =  ship.getBoundingClientRect()
 //    console.log("jkdshfsdkjfkj");
@@ -33,7 +32,7 @@ var Yspeed = 0
 var xPos = 0
 function MoveEnemis(EnemyCountainer){
     let position = EnemyCountainer.getBoundingClientRect()
-    Yspeed +=1
+    Yspeed +=0.4
   if (position.right >= ContainerPos.right) {
     speed = (speed) * -1; 
 }
@@ -47,9 +46,10 @@ xPos += speed;
 class Bullet{
     constructor(shiPosition){
         this.TransalteY = 0
-        this.speed = 5
+        this.speed = 10
         this.shiPosition = shiPosition;
         this.Bullet = document.createElement("div")
+        
     }
 
     makeBullet(){ 
@@ -57,7 +57,6 @@ class Bullet{
         this.Bullet.style.position = "absolute";
         this.Bullet.style.left = `${this.shiPosition.x+1}px`;
         // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
-
         this.Bullet.style.top = `${this.shiPosition.y}px`;
         container.append(this.Bullet)
     }
@@ -66,14 +65,14 @@ class Bullet{
         // const bullet = document.querySelector("#a")
         // console.log("dshfksjdfhsd", bullet);
         // console.log("trueeeeeeeeeeeeeeeeeeee", this.Bullet.getBoundingClientRect(), container.getBoundingClientRect().y);
-        if (container.getBoundingClientRect().y >= this.Bullet.getBoundingClientRect().y){
+        if (container.getBoundingClientRect().y >= this.Bullet.getBoundingClientRect().y ||
+        container.getBoundingClientRect().bottom<= this.Bullet.getBoundingClientRect().y
+    ) {
+        console.log("remooooooved");
             this.Bullet.remove()
-
         }
-        console.log(this.Bullet);
-        
         this.Bullet.style.transform =  `translateY(${this.TransalteY}px)`
-        this.TransalteY     += this.speed *direction
+        this.TransalteY += this.speed *direction
  
     }
 }
@@ -87,8 +86,7 @@ class Enemy extends Bullet{
         this.spawnPostion = 0
         this.Enemys = document.createElement("div")
         this.EnemyBullet = []
-   
-        
+        this.Cooldown = 500 * Math.random()
     }
     makeEnemy(){
             this.Enemys.classList.add('Enemy')
@@ -102,7 +100,6 @@ class Enemy extends Bullet{
     }   
      CheckCollision(bullet){
         // console.log(this.Enemys.getBoundingClientRect().y, bullet);
-    
         // console.log(this.Enemys.getBoundingClientRect().y, bullet.getBoundingClientRect().y);
         if (this.Enemys ){
    if (this.Enemys.getBoundingClientRect().bottom>=bullet.getBoundingClientRect().y    &&
@@ -110,37 +107,42 @@ class Enemy extends Bullet{
         bullet.getBoundingClientRect().x <= this.Enemys.getBoundingClientRect().right
         ){
             this.Enemys.classList.add("Explotion")
-                score += 20
-                container.querySelector('.score').innerHTML = `${score} PTS`
-                this.Enemys.remove()
-                // bullet.remove()
 
-                 delete this.Enemys
-
-            console.log("trueeeeeeeeeeeeeee");
-        
-        
-    }
+            setTimeout(async() => {
+                if (!bullet.classList.contains("laserBeam")){
+                    bullet.remove()
+         
+                     }
+                     this.Enemys.remove()  
+                      delete this.Enemys
+                      }, 500);
+          score+=20
+            document.querySelector('.scorebar .score').innerHTML = `${score} PTS`
+           }
         }
      
 }
 shoot(){
-    setTimeout(() => {
-        let bullet = new Bullet({ x: this.x + this.spawnPostion, y: this.y + this.spawnPostion });
+    if (this.Cooldown <= 0){
+        if (this.Enemys){
+            let bullet = new Bullet({ x: this.Enemys.getBoundingClientRect().x + this.Enemys.offsetWidth/2, y: this.Enemys.getBoundingClientRect().bottom - this.Enemys.offsetWidth/2});  
         bullet.makeBullet();
+        bullet.Bullet.style.background = `url('ezgif.com-effects.gif') center/cover no-repeat `
         this.EnemyBullet.push(bullet);
-    this.EnemyBullet.forEach(bullet =>{
-        bullet.moveBullet(1)
-    
+        this.Cooldown = 500
+        }
+    }
+    if (this.Cooldown >= 0){
+        this.Cooldown--
+    }
+        this.EnemyBullet.forEach(bullet1 =>{
+        bullet1.moveBullet(1)
     })
-    }, 2000);
-
 }
 }
 
 var AlienPos = 10
 let Aliens = []
-
  Array.from({length:9}, ()=>{
     let Alien = new Enemy(AlienPos,10)
     AlienPos += 90
@@ -150,63 +152,108 @@ Alien.makeEnemy()
 
 var ship = document.querySelector(".ship")
 let bullets = []
-let shipspeed = 30;
-let shiPosition = {
-    x:0,
-    y:0
-}
-function move(){
+let shipspeed = 10  ;
+let shipPosition = {
+    x: 0,
+    y: 0
+};
+let keys = {
+    left: false,
+    right: false,
+    bullet:false,
+    super: false,
+};
 
-    MoveEnemis(container.querySelector(".Enemy_container"))
-
-    let position =  ship.getBoundingClientRect()
-   document.onkeydown = (event)=>{
+document.addEventListener("keydown", (event) => {
     if (event.code === "ArrowLeft") {
-        shiPosition.x -= shipspeed; 
+        keys.left = true;
     } else if (event.code === "ArrowRight") {
-        shiPosition.x += shipspeed;
+        keys.right = true;
+    }else if(event.code === "Space") {
+        keys.bullet = true
+ 
+    }else if (event.key == "s") {
+       keys.super = true 
     }
-    ship.style.transform =  `translateX(${shiPosition.x}px)`
-   if (event.code == "Space"){
-    const Bulletz = new Bullet(position)
-    Bulletz.makeBullet()
-    bullets.push(Bulletz)
-   }
-   if (event.key == "s"){
-    const Bulletz = new Bullet(position)
-    Bulletz.Bullet.classList.add('laserBeam')
-    
-    Bulletz.makeBullet()
-    // Bulletz.Bullet.style.width = '1O0vw'
-    // Bulletz.Bullet.style.height = '1O0vh'
+});
+document.addEventListener("keyup", (event) => {
+    if (event.code === "ArrowLeft") {
+        keys.left = false;
+    } else if (event.code === "ArrowRight") {
+        keys.right = false;
+    }else if(event.code === "Space") {
+        keys.bullet = false
+ 
+    }else if (event.key == "s") {
+       keys.super = false 
+    }
+});
 
-    bullets.push(Bulletz)
-   }
-   }
+const  throttleKeys = throttle(()=>{
+    let shipRect = ship.getBoundingClientRect();
+    if (keys.bullet){
+        const Bulletz = new Bullet(shipRect)
+        Bulletz.makeBullet()
+        bullets.push(Bulletz)
+    }
+    if (keys.super){
+        console.log("jdflfdsfksdfkjsdljf");
+        
+        const Bulletz = new Bullet(shipRect)
+        Bulletz.Bullet.classList.add('laserBeam')
+        Bulletz.makeBullet()
+        bullets.push(Bulletz)
+    }
+},170)
 
+function move(){
+    let shipRect = ship.getBoundingClientRect();
+    MoveEnemis(container.querySelector(".Enemy_container"))
+    let containerRect = container.getBoundingClientRect();
+    if (shipRect.left < containerRect.left) {
+        shipPosition.x = 0;
+    } else if (shipRect.right > containerRect.right) {
+        shipPosition.x = containerRect.width - shipRect.width;
+    }
+    if (keys.left) {
+        shipPosition.x -= shipspeed;
+    } 
+    if (keys.right) {
+        shipPosition.x += shipspeed;
+    }
+    ship.style.transform = `translateX(${shipPosition.x}px)`;
+   throttleKeys()
    bullets.forEach(bullet =>{
     bullet.moveBullet(-1)
     Aliens.forEach(Alien =>  {
         Alien.CheckCollision(bullet.Bullet)
     })
 })
-
-    Aliens.forEach(Alien => {
-        Alien.shoot()
-    });  
-
- 
-
    requestAnimationFrame(move);
 }
     requestAnimationFrame(move);
-
-
+    setInterval(() => {     
+    Aliens.forEach(Alien => {
+        Alien.shoot()
+    });  
+    }, 20);
 function Timer(){
-    let timer = container.querySelector('.timer').innerHTML
+    let timer =      document.querySelector('.scorebar .timer').innerHTML
     timer = timer.slice(0, timer.length-1)
-     container.querySelector('.timer').innerHTML = `${parseInt(timer)+1}s`
+     document.querySelector('.scorebar .timer').innerHTML = `${parseInt(timer)+1}s`
 }
 setInterval(()=>{
     Timer()
 }, 1000);
+
+function throttle(func, delay) {
+    let lastTime = 0;
+    return function(...args) {
+      const now = new Date().getTime();
+      if (now - lastTime >= delay) {
+        func(...args);
+        lastTime = now;
+      }
+    };
+  }
+  

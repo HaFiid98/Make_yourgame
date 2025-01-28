@@ -1,4 +1,14 @@
+@font-face {
+    font-family: 'Pixel'; 
+    src: url('NFPixels-Regular.ttf') format('opentype');
+  }
+  
+  body {
+    font-family: 'Pixel', sans-serif; 
+  }
+  
 .container {
+    margin-top: 100px;
     width: 900px;
     display: flex;
     overflow: hidden;
@@ -19,32 +29,61 @@ background: url("CBWd93mWkAA8Nwb (1).png") center/cover no-repeat;
 image-rendering: pixelated;
         /* animation:AnimationMove 1s  ; */
 
-
 }
 /* img{
     image-rendering: pixelated;
 width: 200px;
 height: auto;
 } */
-
+.lifes{
+    width: 400px;
+    height: auto;
+    background: url('lifes/image (4).png') center/cover no-repeat ;
+    image-rendering: pixelated;
+}
 .bullet{
-    width: 20px;
-    height: 12px;
+    width: 25PX;
+    height: 50px;
+
     border-radius: 100%;
-    background-color: #eb1818;
+    background-image: linear-gradient(rgb(189, 46, 46), yellow, blue);
+    image-rendering: pixelated;
+    background: url('ezgif.com-speed.gif') center/cover no-repeat ;
+
+    mix-blend-mode: screen;  
+
 
 }
 
     .Enemy {
-        width: 2vw;
-        height:5vh;
+        width: 100px;
+        height:3vh;
         image-rendering: pixelated;
         mix-blend-mode: screen;
         background: url('image.png') center/cover no-repeat ;
-        /* position: absolute; */
+        /*   position: absolute; */
   
     }   
+    .score {
+        margin-top: 26px;   
+ }
+
+.timer{
+    margin-top: 26px;   
+}
+
     
+    .scorebar{
+        position: fixed;
+        display: flex;
+        top: 0%;
+        justify-content: space-around;
+        width: 960px;
+        height: 120px;      
+        background-color: black;
+        font-size: 50px;
+        color: white;
+    }
     .laserBeam{
         z-index: 0;
         width: 200px;
@@ -80,7 +119,6 @@ background-color: #fe0000;
         height:200px;
         top: 0%;
         left:89%;
-        position: relative;
         font-family: "Pixelify Sans";
         font-size: 40px;
         color: white;
