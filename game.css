@@ -1,3 +1,6 @@
+:root{
+    --health:0%;
+}
 @font-face {
     font-family: 'Pixel'; 
     src: url('NFPixels-Regular.ttf') format('opentype');
@@ -7,12 +10,12 @@
     font-family: 'Pixel', sans-serif; 
   }
   
+
 .container {
-    margin-top: 100px;
-    width: 900px;
+    width: 30vw;
+    height: 85vh;
     display: flex;
     overflow: hidden;
-    height: 1300PX;
     background-color: #000000;
     align-content: center;
     position: relative;
@@ -21,8 +24,8 @@
     image-rendering: pixelated;
 }
 .ship{
-    width:150px;
-    height: 150px;
+    width:6vw;
+    height: 9vh;
     position: absolute;
 bottom: 0;
 background: url("CBWd93mWkAA8Nwb (1).png") center/cover no-repeat;
@@ -36,15 +39,21 @@ width: 200px;
 height: auto;
 } */
 .lifes{
-    width: 400px;
-    height: auto;
-    background: url('lifes/image (4).png') center/cover no-repeat ;
+    margin-top: 0.3vh;
+overflow: hidden;
+    width: 10vw;
+    height: 3.5vh;
+    /* background: url('lifes/lifesSHeet.png') center/cover no-repeat ; */
     image-rendering: pixelated;
-}
-.bullet{
-    width: 25PX;
-    height: 50px;
 
+}
+
+    
+
+
+.bullet{
+    width: 2vw;
+    height: 4vh;
     border-radius: 100%;
     background-image: linear-gradient(rgb(189, 46, 46), yellow, blue);
     image-rendering: pixelated;
@@ -56,38 +65,30 @@ height: auto;
 }
 
     .Enemy {
-        width: 100px;
-        height:3vh;
+        width: 3vw;
+        height:4vh;
         image-rendering: pixelated;
         mix-blend-mode: screen;
         background: url('image.png') center/cover no-repeat ;
         /*   position: absolute; */
   
     }   
-    .score {
-        margin-top: 26px;   
- }
-
-.timer{
-    margin-top: 26px;   
-}
 
     
     .scorebar{
-        position: fixed;
         display: flex;
         top: 0%;
         justify-content: space-around;
-        width: 960px;
-        height: 120px;      
+        width: 32.8vw;
+        height: 3vh;     
         background-color: black;
-        font-size: 50px;
+        font-size: 0.9vw;
         color: white;
     }
     .laserBeam{
         z-index: 0;
-        width: 200px;
-        height: 1500px;
+        width: 10vw;
+        height: 90vh;
         border-radius:0%;
         image-rendering: pixelated;
 background-color: #fe0000;
@@ -105,6 +106,19 @@ background-color: #fe0000;
         
     }
 
+
+    .GameOVER{
+        position: absolute;
+        image-rendering: pixelated;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40vw;
+        height: 20vh;
+        mix-blend-mode:screen;
+        background: url('lifes/GameoverAODPreviewonMakeaGIF-ezgif.com-crop (1).gif') center/cover no-repeat ;
+
+    }
     .Enemy_container{
         /* background-color: black; */
         position: absolute;
@@ -112,29 +126,31 @@ background-color: #fe0000;
         height: 20%;
     }
 
-    .ScoreBoard{
-        /* background-color: black; */
-        width:900px ;
-        overflow: hidden;
-        height:200px;
-        top: 0%;
-        left:89%;
-        font-family: "Pixelify Sans";
-        font-size: 40px;
-        color: white;
-        transition: background-image 0,3s ease-in-out;
-
-    }
 
 
      
+.dmg{
+    animation: moveSpriteSHeet 0.3s  forwards;
+}
+   
 
-    @keyframes AnimationMove {
-        from{
-            transform: translate3d(0px,0,0);
-        }
-        to {
-            transform: translate3d(-100%,0,0);
-        }
-    }
+.shipdmg{
+    animation: shipdmg 0.3s   ease-in-out infinite;
+}
+@keyframes shipdmg {
     
+    50%{
+        opacity: 0;
+    }
+}
+@keyframes moveSpriteSHeet {
+    from {
+transform: translate3d(0px,0,0);  
+filter: opacity(0);
+}
+    to{
+        transform: translate3d(0,calc(var(--health)) ,0);
+        filter: opacity(1);
+
+    }
+}

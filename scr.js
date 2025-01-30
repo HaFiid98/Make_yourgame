@@ -24,6 +24,26 @@
 // }
 
 // const ball = new ball(7)
+
+
+//_____________________ ship __________________________________//
+var  health =    document.querySelector(".scorebar .lifes img")
+var ship = document.querySelector(".ship")
+let bullets = []
+let shipspeed = 10  ;
+var lifes = 5
+let shipPosition = {
+    x: 0,
+    y: 0
+};
+let keys = {
+    left: false,
+    right: false,
+    bullet:false,
+    super: false,
+};
+
+//-------------------------------------------------------------//
 var container = document.querySelector(".container")
 var ContainerPos = container.getBoundingClientRect()
 var score = 0;
@@ -68,7 +88,6 @@ class Bullet{
         if (container.getBoundingClientRect().y >= this.Bullet.getBoundingClientRect().y ||
         container.getBoundingClientRect().bottom<= this.Bullet.getBoundingClientRect().y
     ) {
-        console.log("remooooooved");
             this.Bullet.remove()
         }
         this.Bullet.style.transform =  `translateY(${this.TransalteY}px)`
@@ -107,12 +126,13 @@ class Enemy extends Bullet{
         bullet.getBoundingClientRect().x <= this.Enemys.getBoundingClientRect().right
         ){
             this.Enemys.classList.add("Explotion")
+            if (!bullet.classList.contains("laserBeam")){
+                bullet.remove()
+
+            }
 
             setTimeout(async() => {
-                if (!bullet.classList.contains("laserBeam")){
-                    bullet.remove()
-         
-                     }
+          
                      this.Enemys.remove()  
                       delete this.Enemys
                       }, 500);
@@ -122,8 +142,16 @@ class Enemy extends Bullet{
         }
      
 }
+
 shoot(){
+    // if (   ship.classList.contains("shipdmg") ){
+    //     ship.classList.remove("shipdmg")
+    // }
+
     if (this.Cooldown <= 0){
+        ship.classList.remove("shipdmg")
+        // health.classList.remove("dmg")
+
         if (this.Enemys){
             let bullet = new Bullet({ x: this.Enemys.getBoundingClientRect().x + this.Enemys.offsetWidth/2, y: this.Enemys.getBoundingClientRect().bottom - this.Enemys.offsetWidth/2});  
         bullet.makeBullet();
@@ -137,32 +165,44 @@ shoot(){
     }
         this.EnemyBullet.forEach(bullet1 =>{
         bullet1.moveBullet(1)
+        console.log(CheckColision(bullet1.Bullet,ship));
+
+       if (CheckColision(bullet1.Bullet,ship)){
+health.classList.add("dmg")
+ship.classList.add("shipdmg")
+console.log(ship);
+
+        bullet1.Bullet.remove()
+     let lifePOs = getComputedStyle(document.documentElement).getPropertyValue("--health")
+     console.log();
+     
+     document.documentElement.style.setProperty("--health",`${lifePOs.slice(0,lifePOs.length-1) -20}%` )
+        lifes--
+        console.log("liiiiiiiiiifes:", lifes);
+        
+       }
     })
 }
 }
 
 var AlienPos = 10
+var AlienPosY = 0
 let Aliens = []
- Array.from({length:9}, ()=>{
-    let Alien = new Enemy(AlienPos,10)
-    AlienPos += 90
+var index = 0
+ Array.from({length:25}, ()=>{
+    console.log(index,  index % 5 === 0 );
+    if (index % 5 === 0 ){
+        AlienPosY=+100
+        AlienPos = 0
+    }
+    let Alien = new Enemy(AlienPos,AlienPosY)
+    AlienPos += 100
     Aliens.push(Alien)
 Alien.makeEnemy()
+index++
+
 })
 
-var ship = document.querySelector(".ship")
-let bullets = []
-let shipspeed = 10  ;
-let shipPosition = {
-    x: 0,
-    y: 0
-};
-let keys = {
-    left: false,
-    right: false,
-    bullet:false,
-    super: false,
-};
 
 document.addEventListener("keydown", (event) => {
     if (event.code === "ArrowLeft") {
@@ -206,7 +246,31 @@ const  throttleKeys = throttle(()=>{
     }
 },170)
 
+function CheckColision(obj1, obj2){
+   const obj1post = obj1.getBoundingClientRect()
+   const obj2post = obj2.getBoundingClientRect()
+
+   if ( obj1post.bottom >= obj2post.top && 
+    obj1post.x >= obj2post.x &&
+     obj1post.right <= obj2post.right
+   ){
+return true
+   }
+   return false
+}
+const GameOVER = {
+element : document.createElement("div"),
+}
 function move(){
+    if (lifes ===0){
+        GameOVER.element.classList.add("GameOVER")
+        container.append(GameOVER.element)
+        console.log("DKJQSDKLQSLDKJ");
+        container.style.filter = "grayscale(0.5)";
+        cancelAnimationFrame(id)
+        
+    }
+
     let shipRect = ship.getBoundingClientRect();
     MoveEnemis(container.querySelector(".Enemy_container"))
     let containerRect = container.getBoundingClientRect();
@@ -229,7 +293,7 @@ function move(){
         Alien.CheckCollision(bullet.Bullet)
     })
 })
-   requestAnimationFrame(move);
+  const id = requestAnimationFrame(move);
 }
     requestAnimationFrame(move);
     setInterval(() => {     
