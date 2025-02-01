@@ -12,8 +12,8 @@
   
 
 .container {
-    width: 30vw;
-    height: 85vh;
+    width: 28vw;
+    height: 80vh;
     display: flex;
     overflow: hidden;
     background-color: #000000;
@@ -48,7 +48,12 @@ overflow: hidden;
 
 }
 
+.lifes img{
+    width: 10vw;
+    height: auto;
+    image-rendering: pixelated;
     
+}
 
 
 .bullet{
@@ -102,8 +107,6 @@ background-color: #fe0000;
         background-blend-mode: multiply ;
         background: url('https://media.giphy.com/media/26BRx71hqRexBe7Wo/giphy.gif') center/cover no-repeat ;
         transition: background-image 0,3s ease;
-
-        
     }
 
 
@@ -123,6 +126,8 @@ background-color: #fe0000;
         /* background-color: black; */
         position: absolute;
         width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         height: 20%;
     }
 
@@ -130,7 +135,7 @@ background-color: #fe0000;
 
      
 .dmg{
-    animation: moveSpriteSHeet 0.3s  forwards;
+    animation: moveSpriteSHeet 0.4s  forwards;
 }
    
 
@@ -151,6 +156,17 @@ filter: opacity(0);
     to{
         transform: translate3d(0,calc(var(--health)) ,0);
         filter: opacity(1);
-
     }
+}
+
+.Pause{
+display: none;
+position: absolute;
+width: 20vw;
+height: 30vh;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: #ffffff;
+animation: shipdmg 0.7s   linear 1;;
 }

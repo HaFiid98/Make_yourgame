@@ -41,6 +41,7 @@ let keys = {
     right: false,
     bullet:false,
     super: false,
+    Pause:false
 };
 
 //-------------------------------------------------------------//
@@ -170,8 +171,6 @@ shoot(){
        if (CheckColision(bullet1.Bullet,ship)){
 health.classList.add("dmg")
 ship.classList.add("shipdmg")
-console.log(ship);
-
         bullet1.Bullet.remove()
      let lifePOs = getComputedStyle(document.documentElement).getPropertyValue("--health")
      console.log();
@@ -262,6 +261,10 @@ const GameOVER = {
 element : document.createElement("div"),
 }
 function move(){
+    [lbl] Pausee:
+  let PauseOPtion =  Pause();
+
+  if (PauseOPtion) goto Pausee;
     if (lifes ===0){
         GameOVER.element.classList.add("GameOVER")
         container.append(GameOVER.element)
@@ -292,15 +295,17 @@ function move(){
     Aliens.forEach(Alien =>  {
         Alien.CheckCollision(bullet.Bullet)
     })
+
+  
 })
+Aliens.forEach(Alien => {
+    Alien.shoot()
+}); 
   const id = requestAnimationFrame(move);
 }
+
     requestAnimationFrame(move);
-    setInterval(() => {     
-    Aliens.forEach(Alien => {
-        Alien.shoot()
-    });  
-    }, 20);
+
 function Timer(){
     let timer =      document.querySelector('.scorebar .timer').innerHTML
     timer = timer.slice(0, timer.length-1)
@@ -320,4 +325,24 @@ function throttle(func, delay) {
       }
     };
   }
+  
+ function Pause(){
+    let PauseMenu = container.querySelector(".Pause")
+    let displayValue = window.getComputedStyle(PauseMenu).display;
+    console.log(displayValue);
+    if (keys.Pause === true){
+        PauseMenu.style.display = "block"
+        
+    
+    }else{
+        PauseMenu.style.display = "none"
+
+
+    }
+    return PauseMenu.style.display 
+    
+ }
+    document.querySelector(".scorebar .Pause_Menu").addEventListener("click", ()=>{
+        keys.Pause = !keys.Pause
+    })
   
