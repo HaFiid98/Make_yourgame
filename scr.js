@@ -372,6 +372,8 @@ function throttle(func, delay) {
         keys.Pause = false
     }
   
-    container.querySelector(".Pause img")[1].onclick = ()=>{
-        keys.Pause = false
+    container.querySelectorAll(".Pause img")[1].onclick = ()=>{
+        window.location.reload();
+        console.log("hjdsfhshdf");
+        
     }
