@@ -96,12 +96,17 @@ overflow: hidden;
         height: 90vh;
         border-radius:0%;
         image-rendering: pixelated;
-background-color: #fe0000;
+    background-color: #fe0000;
         mix-blend-mode:screen;
         background: url('7WvCTB-ezgif.com-effects.gif') center/cover no-repeat ;
         
         
     } 
+
+    .Pause_Menu:hover{
+        animation: Btn 0.4s  infinite ease-in-out;
+    }
+
 
     .Explotion{
         background-blend-mode: multiply ;
@@ -148,6 +153,13 @@ background-color: #fe0000;
         opacity: 0;
     }
 }
+
+@keyframes Btn {
+    
+    50%{
+scale: 1.1; 
+   }
+}
 @keyframes moveSpriteSHeet {
     from {
 transform: translate3d(0px,0,0);  
@@ -157,6 +169,11 @@ filter: opacity(0);
         transform: translate3d(0,calc(var(--health)) ,0);
         filter: opacity(1);
     }
+}
+
+.Pause img:hover{
+        animation: Btn 0.5s  infinite;
+
 }
 
 .Pause{
@@ -175,8 +192,8 @@ border: 1px solid rgba(255, 255, 255, 0.3);
     z-index: 3;
 display: none;
 position: absolute;
-width: 20vw;
-height: 40vh;
+width: 15vw;
+height: 30vh;
 top: 50%;
 left: 50%;
 border-radius: 5%;
@@ -188,5 +205,5 @@ p{
     align-items: center;
     text-align: center;
     color: aliceblue;
-    font-size: 1vw;
+    font-size: 1.1vw;
 }

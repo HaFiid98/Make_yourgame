@@ -189,7 +189,7 @@ var AlienPos = 10
 var AlienPosY = 0
 let Aliens = []
 var index = 0
- Array.from({length:25}, ()=>{
+ Array.from({length:15}, ()=>{
     console.log(index,  index % 5 === 0 );
     if (index % 5 === 0 ){
         AlienPosY-=100
@@ -277,7 +277,6 @@ function move(){
 // }
 
 let PauseOPtion =  Pause();
-
 if (PauseOPtion !== "flex"){
     if (lifes ===0){
         GameOVER.element.classList.add("GameOVER")
@@ -349,20 +348,30 @@ function throttle(func, delay) {
     };
   }
   
+  var PauseMenu = container.querySelector(".Pause")
  function Pause(){
-    let PauseMenu = container.querySelector(".Pause")
     let displayValue = window.getComputedStyle(PauseMenu).display;
     console.log(displayValue);
     if (keys.Pause === true){
         PauseMenu.style.display = "flex"
-        
     }else{
         PauseMenu.style.display = "none"
     }
+
+ 
     return PauseMenu.style.display 
     
  }
     document.querySelector(".scorebar .Pause_Menu").addEventListener("click", ()=>{
         keys.Pause = !keys.Pause
+        console.log("djfsfhkdsfksdkfdsj");
+        
     })
+
+    container.querySelector(".Pause img").onclick = ()=>{
+        keys.Pause = false
+    }
   
+    container.querySelector(".Pause img")[1].onclick = ()=>{
+        keys.Pause = false
+    }
