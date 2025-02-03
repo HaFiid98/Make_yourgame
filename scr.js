@@ -141,7 +141,8 @@ class Enemy extends Bullet{
             document.querySelector('.scorebar .score').innerHTML = `${score} PTS`
            }
         }
-     
+        container.querySelector(".Pause p").innerHTML = `Your Current Score is:<br>${score || 0}PTS`
+
 }
 
 shoot(){
@@ -191,11 +192,11 @@ var index = 0
  Array.from({length:25}, ()=>{
     console.log(index,  index % 5 === 0 );
     if (index % 5 === 0 ){
-        AlienPosY=+100
+        AlienPosY-=100
         AlienPos = 0
     }
     let Alien = new Enemy(AlienPos,AlienPosY)
-    AlienPos += 100
+    AlienPos += 80
     Aliens.push(Alien)
 Alien.makeEnemy()
 index++
@@ -257,14 +258,27 @@ return true
    }
    return false
 }
+
 const GameOVER = {
 element : document.createElement("div"),
 }
-function move(){
-    [lbl] Pausee:
-  let PauseOPtion =  Pause();
 
-  if (PauseOPtion) goto Pausee;
+function move(){
+// if (PauseOPtion === "block") {
+//     console.log(PauseOPtion);
+    
+//     goto start;
+// }
+
+// PauseMenu : while(true){
+// let PauseOPtion =  Pause();
+// if (PauseOPtion === "block") continue PauseMenu
+// break;
+// }
+
+let PauseOPtion =  Pause();
+
+if (PauseOPtion !== "flex"){
     if (lifes ===0){
         GameOVER.element.classList.add("GameOVER")
         container.append(GameOVER.element)
@@ -301,10 +315,19 @@ function move(){
 Aliens.forEach(Alien => {
     Alien.shoot()
 }); 
+}
+
   const id = requestAnimationFrame(move);
+  
 }
 
     requestAnimationFrame(move);
+
+
+
+
+
+
 
 function Timer(){
     let timer =      document.querySelector('.scorebar .timer').innerHTML
@@ -331,13 +354,10 @@ function throttle(func, delay) {
     let displayValue = window.getComputedStyle(PauseMenu).display;
     console.log(displayValue);
     if (keys.Pause === true){
-        PauseMenu.style.display = "block"
+        PauseMenu.style.display = "flex"
         
-    
     }else{
         PauseMenu.style.display = "none"
-
-
     }
     return PauseMenu.style.display 
     
