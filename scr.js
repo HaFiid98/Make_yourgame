@@ -1,30 +1,3 @@
-// var ship = document.querySelector(".ship")
-// console.log(ship);
-// function move(){
-//    let position =  ship.getBoundingClientRect()
-//    console.log("jkdshfsdkjfkj");
-// document.addEventListener("keydown", ()=>{
-//     ship.style.color = "black"
-//     console.log("ljsdfklsdflkj");
-//     ship.style.transform =  `translateX(${10}px)`
-//     requestAnimationFrame(move);
-// }
-// )
-// }
-
-// class ball{
-//     constructor(x){
-//         this.x = x
-//         this.y = y
-//         this.ball = document.createElement("div")
-//     }
-//     // move(){
-//     //     this.ball.style.top= x
-//     // }
-// }
-
-// const ball = new ball(7)
-
 
 //_____________________ ship __________________________________//
 var  health =    document.querySelector(".scorebar .lifes img")
@@ -53,14 +26,13 @@ var Yspeed = 0
 var xPos = 0
 function MoveEnemis(EnemyCountainer){
     let position = EnemyCountainer.getBoundingClientRect()
-    Yspeed +=0.4
+    Yspeed +=0.1 
   if (position.right >= ContainerPos.right) {
     speed = (speed) * -1; 
 }
 if (position.left <= ContainerPos.left) {
     speed = Math.abs(speed);
 }
-
 xPos += speed;  
     EnemyCountainer.style.transform= `TranslateX(${xPos}px) TranslateY(${Yspeed}px)`
 }
@@ -77,15 +49,11 @@ class Bullet{
         this.Bullet.classList.add('bullet')
         this.Bullet.style.position = "absolute";
         this.Bullet.style.left = `${this.shiPosition.x+1}px`;
-        // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
         this.Bullet.style.top = `${this.shiPosition.y}px`;
         container.append(this.Bullet)
     }
 
     moveBullet(direction){
-        // const bullet = document.querySelector("#a")
-        // console.log("dshfksjdfhsd", bullet);
-        // console.log("trueeeeeeeeeeeeeeeeeeee", this.Bullet.getBoundingClientRect(), container.getBoundingClientRect().y);
         if (container.getBoundingClientRect().y >= this.Bullet.getBoundingClientRect().y ||
         container.getBoundingClientRect().bottom<= this.Bullet.getBoundingClientRect().y
     ) {
@@ -110,50 +78,45 @@ class Enemy extends Bullet{
     }
     makeEnemy(){
             this.Enemys.classList.add('Enemy')
-            this.Enemys.style.position = "absolute";
+            // this.Enemys.style.position = "absolute";
             this.Enemys.style.left = `${this.x+ this.spawnPostion}px`;
-            // this.Bullet.style.transform =  `translateX(${this.shiPosition.x+1}}px)`
             this.Enemys.style.top = `${this.y - this.spawnPostion}px`;
             this.spawnPostion += 5
             container.querySelector(".Enemy_container").append(this.Enemys)
         
     }   
      CheckCollision(bullet){
-        // console.log(this.Enemys.getBoundingClientRect().y, bullet);
-        // console.log(this.Enemys.getBoundingClientRect().y, bullet.getBoundingClientRect().y);
+
         if (this.Enemys ){
    if (this.Enemys.getBoundingClientRect().bottom>=bullet.getBoundingClientRect().y    &&
             this.Enemys.getBoundingClientRect().x <= bullet.getBoundingClientRect().x + bullet.getBoundingClientRect().width &&
         bullet.getBoundingClientRect().x <= this.Enemys.getBoundingClientRect().right
         ){
-            this.Enemys.classList.add("Explotion")
+            this.Enemys
             if (!bullet.classList.contains("laserBeam")){
                 bullet.remove()
-
             }
-
-            setTimeout(async() => {
-          
+            let EMptyspace = document.createElement("div")
+            EMptyspace.classList.add("Explotion")
+            container.querySelector(".Enemy_container").replaceChild(EMptyspace,this.Enemys)
                      this.Enemys.remove()  
                       delete this.Enemys
-                      }, 500);
+                      
           score+=20
+          setTimeout(() => {
+            EMptyspace.classList.remove("Explotion")
+          }, 400);
             document.querySelector('.scorebar .score').innerHTML = `${score} PTS`
            }
         }
+
         container.querySelector(".Pause p").innerHTML = `Your Current Score is:<br>${score || 0}PTS`
 
 }
 
 shoot(){
-    // if (   ship.classList.contains("shipdmg") ){
-    //     ship.classList.remove("shipdmg")
-    // }
-
     if (this.Cooldown <= 0){
         ship.classList.remove("shipdmg")
-        // health.classList.remove("dmg")
-
         if (this.Enemys){
             let bullet = new Bullet({ x: this.Enemys.getBoundingClientRect().x + this.Enemys.offsetWidth/2, y: this.Enemys.getBoundingClientRect().bottom - this.Enemys.offsetWidth/2});  
         bullet.makeBullet();
@@ -167,19 +130,14 @@ shoot(){
     }
         this.EnemyBullet.forEach(bullet1 =>{
         bullet1.moveBullet(1)
-        console.log(CheckColision(bullet1.Bullet,ship));
-
        if (CheckColision(bullet1.Bullet,ship)){
 health.classList.add("dmg")
 ship.classList.add("shipdmg")
         bullet1.Bullet.remove()
-     let lifePOs = getComputedStyle(document.documentElement).getPropertyValue("--health")
-     console.log();
-     
+     let lifePOs = getComputedStyle(document.documentElement).getPropertyValue("--health")     
      document.documentElement.style.setProperty("--health",`${lifePOs.slice(0,lifePOs.length-1) -20}%` )
         lifes--
-        console.log("liiiiiiiiiifes:", lifes);
-        
+        console.log("liiiiiiiiiifes:", lifes);   
        }
     })
 }
@@ -189,14 +147,14 @@ var AlienPos = 10
 var AlienPosY = 0
 let Aliens = []
 var index = 0
- Array.from({length:15}, ()=>{
+ Array.from({length:12}, ()=>{
     console.log(index,  index % 5 === 0 );
     if (index % 5 === 0 ){
         AlienPosY-=100
         AlienPos = 0
     }
     let Alien = new Enemy(AlienPos,AlienPosY)
-    AlienPos += 80
+    AlienPos += 100
     Aliens.push(Alien)
 Alien.makeEnemy()
 index++
@@ -236,9 +194,7 @@ const  throttleKeys = throttle(()=>{
         Bulletz.makeBullet()
         bullets.push(Bulletz)
     }
-    if (keys.super){
-        console.log("jdflfdsfksdfkjsdljf");
-        
+    if (keys.super){        
         const Bulletz = new Bullet(shipRect)
         Bulletz.Bullet.classList.add('laserBeam')
         Bulletz.makeBullet()
@@ -261,31 +217,24 @@ return true
 
 const GameOVER = {
 element : document.createElement("div"),
+restart : document.createElement("img")
 }
 
 function move(){
-// if (PauseOPtion === "block") {
-//     console.log(PauseOPtion);
-    
-//     goto start;
-// }
-
-// PauseMenu : while(true){
-// let PauseOPtion =  Pause();
-// if (PauseOPtion === "block") continue PauseMenu
-// break;
-// }
 
 let PauseOPtion =  Pause();
-if (PauseOPtion !== "flex"){
-    if (lifes ===0){
-        GameOVER.element.classList.add("GameOVER")
-        container.append(GameOVER.element)
-        console.log("DKJQSDKLQSLDKJ");
-        container.style.filter = "grayscale(0.5)";
-        cancelAnimationFrame(id)
-        
-    }
+if (lifes ===0){
+    GameOVER.element.classList.add("GameOVER")
+    GameOVER.restart.classList.add("restart")
+    GameOVER.restart.src = "lifes/restart.png"
+
+
+    container.append(GameOVER.element, GameOVER.restart)
+    container.style.filter = "grayscale(0.5)";
+    // cancelAnimationFrame(id)
+    
+}
+if (PauseOPtion !== "flex" && lifes !==0){
 
     let shipRect = ship.getBoundingClientRect();
     MoveEnemis(container.querySelector(".Enemy_container"))
@@ -293,7 +242,7 @@ if (PauseOPtion !== "flex"){
     if (shipRect.left < containerRect.left) {
         shipPosition.x = 0;
     } else if (shipRect.right > containerRect.right) {
-        shipPosition.x = containerRect.width - shipRect.width;
+        shipPosition.x = containerRect.width - shipRect.width -20;
     }
     if (keys.left) {
         shipPosition.x -= shipspeed;
@@ -315,27 +264,23 @@ Aliens.forEach(Alien => {
     Alien.shoot()
 }); 
 }
-
   const id = requestAnimationFrame(move);
-  
 }
-
     requestAnimationFrame(move);
-
-
-
-
-
 
 
 function Timer(){
     let timer =      document.querySelector('.scorebar .timer').innerHTML
     timer = timer.slice(0, timer.length-1)
+    if (parseInt(timer)%10 === 0){
+        Yspeed +=2
+    }
      document.querySelector('.scorebar .timer').innerHTML = `${parseInt(timer)+1}s`
 }
 setInterval(()=>{
     Timer()
 }, 1000);
+
 
 function throttle(func, delay) {
     let lastTime = 0;
@@ -350,8 +295,6 @@ function throttle(func, delay) {
   
   var PauseMenu = container.querySelector(".Pause")
  function Pause(){
-    let displayValue = window.getComputedStyle(PauseMenu).display;
-    console.log(displayValue);
     if (keys.Pause === true){
         PauseMenu.style.display = "flex"
     }else{
@@ -364,7 +307,6 @@ function throttle(func, delay) {
  }
     document.querySelector(".scorebar .Pause_Menu").addEventListener("click", ()=>{
         keys.Pause = !keys.Pause
-        console.log("djfsfhkdsfksdkfdsj");
         
     })
 
@@ -372,8 +314,7 @@ function throttle(func, delay) {
         keys.Pause = false
     }
   
-    container.querySelectorAll(".Pause img")[1].onclick = ()=>{
+    container.querySelectorAll(".restart")[0].onclick = ()=>{
         window.location.reload();
-        console.log("hjdsfhshdf");
         
     }
