@@ -17,6 +17,8 @@ let keys = {
     Pause:false
 };
 
+
+var id
 //-------------------------------------------------------------//
 var container = document.querySelector(".container")
 var ContainerPos = container.getBoundingClientRect()
@@ -61,7 +63,6 @@ class Bullet{
         }
         this.Bullet.style.transform =  `translateY(${this.TransalteY}px)`
         this.TransalteY += this.speed *direction
- 
     }
 }
 class Enemy extends Bullet{
@@ -182,7 +183,7 @@ document.addEventListener("keyup", (event) => {
     }else if(event.code === "Space") {
         keys.bullet = false
  
-    }else if (event.key == "s") {
+    }else if (event.key === "s") {
        keys.super = false 
     }
 });
@@ -221,21 +222,22 @@ restart : document.createElement("img")
 }
 
 function move(){
+console.log("sqdjklsqdjsldlsqk");
 
 let PauseOPtion =  Pause();
 if (lifes ===0){
     GameOVER.element.classList.add("GameOVER")
     GameOVER.restart.classList.add("restart")
     GameOVER.restart.src = "lifes/restart.png"
-
-
-    container.append(GameOVER.element, GameOVER.restart)
+    const restart = container.querySelectorAll(".Pause img")[1]
+    restart.style.top = "50%"
+    restart.style.left = "50%"
+    restart.style.animation = "Btn 3s  linear infinite"
+    restart.style.transform = "translate(-50%, 180%)"
+    container.append(GameOVER.element, restart)
     container.style.filter = "grayscale(0.5)";
-    // cancelAnimationFrame(id)
-    
 }
 if (PauseOPtion !== "flex" && lifes !==0){
-
     let shipRect = ship.getBoundingClientRect();
     MoveEnemis(container.querySelector(".Enemy_container"))
     let containerRect = container.getBoundingClientRect();
@@ -257,24 +259,20 @@ if (PauseOPtion !== "flex" && lifes !==0){
     Aliens.forEach(Alien =>  {
         Alien.CheckCollision(bullet.Bullet)
     })
-
-  
 })
 Aliens.forEach(Alien => {
     Alien.shoot()
 }); 
 }
-  const id = requestAnimationFrame(move);
+id = requestAnimationFrame(move);
 }
-    requestAnimationFrame(move);
+requestAnimationFrame(move);
 
 
 function Timer(){
     let timer =      document.querySelector('.scorebar .timer').innerHTML
     timer = timer.slice(0, timer.length-1)
-    if (parseInt(timer)%10 === 0){
-        Yspeed +=2
-    }
+ 
      document.querySelector('.scorebar .timer').innerHTML = `${parseInt(timer)+1}s`
 }
 setInterval(()=>{
@@ -315,6 +313,59 @@ function throttle(func, delay) {
     }
   
     container.querySelectorAll(".restart")[0].onclick = ()=>{
-        window.location.reload();
-        
+        resetGame(id)        
     }
+
+    function resetGame(id) {
+      container.querySelector(".Enemy_container").remove()
+
+        let enemicontai = document.createElement("div")
+        enemicontai.classList.add(".Enemy_container")
+      container.append(enemicontai)
+        
+        cancelAnimationFrame(id);
+        keys.Pause = false;
+    
+        lifes = 5;
+        document.documentElement.style.setProperty("--health", "100%");
+        
+        score = 0;
+        document.querySelector('.scorebar .score').innerHTML = `${score} PTS`;
+        document.querySelector('.scorebar .timer').innerHTML = "0s";
+        
+        shipPosition = { x: 0, y: 0 };
+        ship.style.transform = `translateX(${shipPosition.x}px)`;
+        
+        bullets.forEach(bullet => bullet.Bullet.remove());
+        bullets = [];
+        
+        Aliens.forEach(Alien => {
+            if (Alien.Enemys) {
+                Alien.EnemyBullet.forEach(bullet => {
+                    bullet.Bullet.remove();
+                });
+                Alien.Enemys.remove();
+            }
+        });
+        Aliens = [];
+    
+        AlienPos = 10;
+        AlienPosY = 0;
+        index = 0;
+        Array.from({ length: 12 }, () => {
+            if (index % 5 === 0) {
+                AlienPosY -= 100;
+                AlienPos = 0;
+            }
+            let Alien = new Enemy(AlienPos, AlienPosY);
+            AlienPos += 100;
+            Aliens.push(Alien);
+            Alien.makeEnemy();
+            index++;
+        });
+    
+        GameOVER.element.classList.remove("GameOVER");
+        container.style.filter = "none";
+        id = requestAnimationFrame(move);
+    }
+    
