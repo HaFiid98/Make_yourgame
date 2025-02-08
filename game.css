@@ -225,7 +225,7 @@ animation: shipdmg 0.2s   linear 1;;
 p{
     align-items: center;
     text-align: center;
-    color: aliceblue;
+    color: rgb(0, 0, 0);
     font-size: 1.1vw;
 }
 

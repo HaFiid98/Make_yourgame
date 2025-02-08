@@ -217,15 +217,19 @@ console.log(EnemyCOunt);
         if (container.querySelector(".YouWIn") === null){
             let YouWin = document.createElement("div")
             let p = document.createElement("p")
- 
+            container.style.filter = "hue-rotate(10deg)";
 
-
-            container.style.filter =  "brightness(150%)"
+            p.innerHTML = "YOU<br>WON!!"
+            p.style.fontSize = "5vw"
+            // p.style.zIndex = "10"
+            p.style.position = "absolute"
+            
+            p.style.color = "white"
+            p.style.top = "50%"
+            p.style.left = "50%"
+            p.style.transform = "translate(-50%, -200%)"            
             YouWin.classList.add("YouWIn")
-            // YouWin.style.mixBlendMode = "norm"
-            container.appendChild(YouWin)
-    console.log("yees");
-    
+            container.append(YouWin, p)
         }
 
         
@@ -241,8 +245,8 @@ if (lifes ===0 ){
             let copy = restart.cloneNode(true)
             copy.style.top = "50%"
             copy.style.left = "50%"
-            copy.style.animation = "Btn 3s  linear infinite"
             copy.style.transform = "translate(-50%, 200%)"
+            copy.style.animation = "Btn 3s  linear infinite"
             copy.addEventListener("click", ()=>{
                 resetGame(id)
             })
@@ -312,8 +316,6 @@ function throttle(func, delay) {
     }else{
         PauseMenu.style.display = "none"
     }
-
- 
     return PauseMenu.style.display 
     
  }
@@ -335,7 +337,12 @@ function throttle(func, delay) {
 
 
     function resetGame(id) {
+    
+        container.querySelector(".YouWIn").remove()
+        // container.querySelector("p").remove()
+
         console.log("heeeere");
+        EnemyCOunt = 12
         container.querySelectorAll(".Enemy_container div").forEach((div)=>{
             div.remove()
         })
